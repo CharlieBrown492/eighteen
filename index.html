@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contagem regressiva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem 1rem;
+            color: #4d3811;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(255, 255, 255, .18) 0 2px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(255, 255, 255, .18) 0 2px, transparent 3px),
+                linear-gradient(135deg, #f8d64e, #ffe98a 55%, #f7c844);
+            background-size: 34px 34px, 42px 42px, auto;
+        }
+
+        h1 {
+            max-width: 760px;
+            margin: 0 0 2rem;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.2;
+            text-shadow: 0 3px 12px rgba(25, 55, 100, .25);
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: min(100%, 780px);
+            padding: clamp(1.5rem, 5vw, 3rem);
+            border: 1px solid rgba(255, 255, 255, .6);
+            background: rgba(255, 255, 255, .94);
+            color: #203653;
+            border-radius: 28px;
+            box-shadow: 0 24px 70px rgba(25, 55, 100, .3);
+        }
+
+        .date {
+            margin: 0 0 1.75rem;
+            color: #3974b8;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            font-weight: 600;
+        }
+
+        #timer {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: clamp(.6rem, 2vw, 1rem);
+            width: 100%;
+        }
+
+        .time-unit {
+            flex: 1 1 120px;
+            padding: 1rem .75rem;
+            border-radius: 18px;
+            background: linear-gradient(145deg, #eaf4ff, #f0f8ff);
+        }
+
+        .time-value {
+            display: block;
+            color: #2874c8;
+            font-size: clamp(2rem, 6vw, 3.25rem);
+            font-weight: 700;
+            line-height: 1.1;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .time-label {
+            display: block;
+            margin-top: .4rem;
+            color: #55718f;
+            font-size: .85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        @media (max-width: 420px) {
+            .time-unit {
+                flex-basis: calc(50% - .5rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Quanto falta para o TiTi fazer 18 anos?</h1>
+    <div class="container">
+        <p class="date">13 de setembro de 2027</p>
+        <div id="timer" role="timer" aria-label="Contagem regressiva" aria-live="off"></div>
+    </div>
+        
+    <script>
+        const timer = document.getElementById("timer");
+        const deadline = new Date(2027, 8, 13);
+        let interval;
+
+        function updateTimer() {
+            const remaining = deadline.getTime() - Date.now();
+
+            if (remaining <= 0) {
+                timer.textContent = "Chegou o grande dia!";
+                clearInterval(interval);
+                return;
+            }
+
+            const days = Math.floor(remaining / 86400000);
+            const hours = Math.floor((remaining % 86400000) / 3600000);
+            const minutes = Math.floor((remaining % 3600000) / 60000);
+            const seconds = Math.floor((remaining % 60000) / 1000);
+
+            const units = [
+                ["dias", days],
+                ["horas", hours],
+                ["minutos", minutes],
+                ["segundos", seconds]
+            ];
+            timer.innerHTML = units.map(([label, value]) =>
+                `<div class="time-unit"><span class="time-value">${value}</span><span class="time-label">${label}</span></div>`
+            ).join("");
+        }
+
+        updateTimer();
+        interval = setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>
